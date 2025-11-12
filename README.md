@@ -22,6 +22,14 @@ python -m worker.runner
 pytest -q
 ```
 
+## Docker Compose 启动
+```bash
+docker compose up --build -d
+# 查看日志
+docker compose logs -f api
+docker compose logs -f worker
+```
+
 ## Profiling 工具
 `tools/profile.py` 封装 `cProfile` 与 `py-spy`：
 ```bash

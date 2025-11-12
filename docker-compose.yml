@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - QUEUE_KEY=task_queue
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - QUEUE_KEY=task_queue
+    depends_on:
+      - redis
+    restart: unless-stopped
